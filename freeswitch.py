@@ -47,6 +47,8 @@ class FreeSWITCH():
         self.parser.add_argument('-r', '--remove', type=str, default=None, help='删除用户', metavar="1000")
         self.parser.add_argument('-l', '--list', action="store_true", default=False, help='列出用户')
         self.parser.add_argument('-s', '--show', type=str, default=None, help='查看用户', metavar="1000")
+        self.parser.add_argument('--strength', action="store_true", default=False, help='密码强度（字母加数字）')
+        self.parser.add_argument('-e', '--export', type=str, default=None, help='导出联系人', metavar="contacts.csv")
         self.parser.add_argument('-d', '--debug', action="store_true", default=False, help='调试模式')
 
         self.args = self.parser.parse_args()
@@ -59,20 +61,23 @@ class FreeSWITCH():
         password = ''.join(random.choice(all_characters) for i in range(8))
         return password
 
-    def password1(self):
+    def password1(self, length=4):
         # 定义所有可能的字符，包括大小写字母和数字
         all_characters = string.digits
 
         # 生成 8 个长度为 8 的密码
-        password = ''.join(random.choice(all_characters) for i in range(4))
+        password = ''.join(random.choice(all_characters) for i in range(length))
         return password
 
     def add(self, args):
 
         number = args[0]
         callsign = args[1]
-        password = self.password()
-        vmpassword = self.password1()
+        if self.args.strength:
+            password = self.password()
+        else:
+            password = self.password1(8)
+        vmpassword = self.password1(4)
 
         userfile = os.path.join(self.freeswitch, 'directory/default', f"{number}.xml")
         if os.path.isfile(userfile):
@@ -158,7 +163,8 @@ class FreeSWITCH():
             self.logger.info(message)
             print(message)
 
-    def list(self):
+    def directory(self):
+
         userlists = []
 
         directory = os.path.join(self.freeswitch, 'directory/default')
@@ -187,9 +193,15 @@ class FreeSWITCH():
 
             userlists.append([number, callsign, password, vmpassword, callgroup])
 
+        return userlists
+
+    def list(self):
+        userlists = self.directory()
+
         tables = sorted(userlists, key=lambda x: x[0])
         tables.insert(0, ["电话号码", "呼号", "密码", "语音信箱", "呼叫组"])
-        textable = Texttable(max_width=100)
+        textable = Texttable(max_width=150)
+        textable.set_cols_dtype(["i", "t", "t", "t", "t"])
         textable.add_rows(tables)
         print(textable.draw())
 
@@ -208,6 +220,23 @@ class FreeSWITCH():
             self.logger.info(f"REMOVE {number}")
             os.remove(userfile)
 
+    def export(self, filepath):
+
+        import csv
+
+        contacts = self.directory()
+
+        headers = ['电话号码', '呼号']
+        rows = []
+
+        for contact in contacts:
+            rows.append((contact[0], contact[1]))
+
+        with open(filepath, 'w', encoding='utf8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(headers)
+            writer.writerows(rows)
+
     def main(self):
 
         # print(args, args.subcommand)
@@ -219,6 +248,8 @@ class FreeSWITCH():
             self.show(self.args.show)
         elif self.args.remove:
             self.remove(self.args.remove)
+        elif self.args.export:
+            self.export(self.args.export)
         else:
             self.parser.print_help()
             exit()
