@@ -1,5 +1,11 @@
 # freeswitch 用户管理
 
+## 安装依赖
+
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+## 帮助信息
+
 ```shell
 PS D:\GitHub\freeswitch> python.exe .\freeswitch.py -h
 usage: freeswitch.py [-h] [-a <number> <callsign> <callgroup> [<number> <callsign> <callgroup> ...]] [-r 1000] [-l] [-s 1000] [-d]

@@ -3,7 +3,7 @@
 ##############################################
 # Home	: https://www.netkiller.cn
 # Author: Neo <netkiller@msn.com>
-# Upgrade: 2025-04-10
+# Upgrade: 2025-04-11
 # FreeSWITCH 用户管理工具
 ##############################################
 try:
@@ -28,7 +28,7 @@ except ImportError as err:
 
 
 class FreeSWITCH():
-    freeswitch = 'test'
+    freeswitch = '/etc/freeswitch'
 
     def __init__(self):
         self.basedir = os.path.dirname(os.path.abspath(__file__))
@@ -159,10 +159,12 @@ class FreeSWITCH():
             print(message)
 
     def list(self):
-        userlists = [["电话号码", "呼号", "密码", "语音信箱", "呼叫组"]]
+        userlists = []
 
         directory = os.path.join(self.freeswitch, 'directory/default')
         for user in os.listdir(directory):
+            if user in ['brian.xml', 'default.xml', 'example.com.xml', 'skinny-example.xml']:
+                continue
             tree = etree.parse(os.path.join(directory, user))
             params = tree.xpath('//include/user/params/param')
             # for param in params:
@@ -185,9 +187,11 @@ class FreeSWITCH():
 
             userlists.append([number, callsign, password, vmpassword, callgroup])
 
-        table = Texttable(max_width=100)
-        table.add_rows(userlists)
-        print(table.draw())
+        tables = sorted(userlists, key=lambda x: x[0])
+        tables.insert(0, ["电话号码", "呼号", "密码", "语音信箱", "呼叫组"])
+        textable = Texttable(max_width=100)
+        textable.add_rows(tables)
+        print(textable.draw())
 
     def show(self, number):
         # directory = os.path.join(self.freeswitch, 'directory/default')
