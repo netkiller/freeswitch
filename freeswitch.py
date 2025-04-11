@@ -159,7 +159,7 @@ class FreeSWITCH():
             #     # writexml(writer, indent="", addindent="", newl="", encoding=None)，
             #     doc.writexml(f, addindent='  ', newl='\n', encoding='utf-8')
             file.write(xmlString)
-            message = f"Password: {password} Voicemail: {vmpassword}"
+            message = f"Number: {number} Password: {password} Voicemail: {vmpassword}"
             self.logger.info(message)
             print(message)
 
