@@ -7,8 +7,9 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ## 帮助信息
 
 ```shell
+
 PS D:\GitHub\freeswitch> python.exe .\freeswitch.py -h
-usage: freeswitch.py [-h] [-a <number> <callsign> <callgroup> [<number> <callsign> <callgroup> ...]] [-r 1000] [-l] [-s 1000] [-d]
+usage: freeswitch.py [-h] [-a <number> <callsign> <callgroup> [<number> <callsign> <callgroup> ...]] [-r 1000] [-l] [-s 1000] [--strength] [-e contacts.csv] [-d]
 
 FreeSWITCH 用户管理工具
 
@@ -20,9 +21,13 @@ options:
                         删除用户
   -l, --list            列出用户
   -s 1000, --show 1000  查看用户
+  --strength            密码强度（字母加数字）
+  -e contacts.csv, --export contacts.csv
+                        导出联系人
   -d, --debug           调试模式
 
 Author: netkiller - https://www.netkiller.cn/linux/
+
 
 ```
 

@@ -3,7 +3,7 @@
 ##############################################
 # Home	: https://www.netkiller.cn
 # Author: Neo <netkiller@msn.com>
-# Upgrade: 2025-04-11
+# Upgrade: 2025-04-24
 # FreeSWITCH 用户管理工具
 ##############################################
 try:
@@ -40,11 +40,15 @@ class FreeSWITCH():
 
         self.logger = logging.getLogger()
         self.parser = argparse.ArgumentParser(description='FreeSWITCH 用户管理工具',
-                                              epilog='Author: netkiller - https://www.netkiller.cn/linux/')
+                                              epilog='Author: netkiller - https://www.netkiller.cn/linux/voip/')
 
-        self.parser.add_argument('-a', '--add', nargs='+', default=None, help='添加用户',
-                                 metavar="<number> <callsign> <callgroup>")
+        self.parser.add_argument('-a', '--add', nargs=3, default=None, help='<number> <callsign> <callgroup> 添加用户',
+                                 metavar="")
+        self.parser.add_argument('-p', '--passwd', type=str, default=None, help='指定密码', metavar="")
         self.parser.add_argument('-r', '--remove', type=str, default=None, help='删除用户', metavar="1000")
+        self.parser.add_argument('-c', '--change', nargs=3, default=None,
+                                 help='<number> <callsign> <callgroup> 修改用户',
+                                 metavar="")
         self.parser.add_argument('-l', '--list', action="store_true", default=False, help='列出用户')
         self.parser.add_argument('-s', '--show', type=str, default=None, help='查看用户', metavar="1000")
         self.parser.add_argument('--strength', action="store_true", default=False, help='密码强度（字母加数字）')
@@ -73,11 +77,15 @@ class FreeSWITCH():
 
         number = args[0]
         callsign = args[1]
-        if self.args.strength:
-            password = self.password()
+        if self.args.passwd:
+            password = self.args.passwd
+            vmpassword = self.args.passwd
         else:
-            password = self.password1(8)
-        vmpassword = self.password1(4)
+            if self.args.strength:
+                password = self.password()
+            else:
+                password = self.password1(8)
+            vmpassword = self.password1(4)
 
         userfile = os.path.join(self.freeswitch, 'directory/default', f"{number}.xml")
         if os.path.isfile(userfile):
@@ -237,9 +245,21 @@ class FreeSWITCH():
             writer.writerow(headers)
             writer.writerows(rows)
 
+    def change(self, number):
+
+        userfile = os.path.join(self.freeswitch, 'directory/default', f"{number}.xml")
+        if os.path.isfile(userfile):
+            confirm = input("用户已存在是否覆盖(Y/N): ")
+            if confirm == 'n' or confirm == 'N':
+                exit()
+            else:
+                # print(self.args.change)
+                os.remove(userfile)
+                self.add(self.args.change)
+
     def main(self):
 
-        # print(args, args.subcommand)
+        print(self.args)
         if self.args.add and len(self.args.add) >= 2:
             self.add(self.args.add)
         elif self.args.list:
@@ -250,6 +270,8 @@ class FreeSWITCH():
             self.remove(self.args.remove)
         elif self.args.export:
             self.export(self.args.export)
+        elif self.args.change:
+            self.change(self.args.change[0])
         else:
             self.parser.print_help()
             exit()
