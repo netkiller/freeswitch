@@ -259,7 +259,7 @@ class FreeSWITCH():
 
     def main(self):
 
-        print(self.args)
+        # print(self.args)
         if self.args.add and len(self.args.add) >= 2:
             self.add(self.args.add)
         elif self.args.list:
