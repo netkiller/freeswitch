@@ -54,6 +54,7 @@ class FreeSWITCH():
         self.parser.add_argument('--strength', action="store_true", default=False, help='密码强度（字母加数字）')
         self.parser.add_argument('-e', '--export', type=str, default=None, help='导出联系人', metavar="contacts.csv")
         self.parser.add_argument('-d', '--debug', action="store_true", default=False, help='调试模式')
+        self.parser.add_argument('-b', '--backup', action="store_true", default=False, help='备份 XML 配置文件')
 
         self.args = self.parser.parse_args()
 
@@ -257,6 +258,9 @@ class FreeSWITCH():
                 os.remove(userfile)
                 self.add(self.args.change)
 
+    def backup(self):
+        os.system(f"tar zcvf freeswitch.{datetime.today().strftime('%Y-%m-%d')}.tgz {self.freeswitch}")
+
     def main(self):
 
         # print(self.args)
@@ -272,6 +276,8 @@ class FreeSWITCH():
             self.export(self.args.export)
         elif self.args.change:
             self.change(self.args.change[0])
+        elif self.args.backup:
+            self.backup()
         else:
             self.parser.print_help()
             exit()
