@@ -3,7 +3,7 @@
 ##############################################
 # Home	: https://www.netkiller.cn
 # Author: Neo <netkiller@msn.com>
-# Upgrade: 2025-04-24
+# Upgrade: 2025-04-30
 # FreeSWITCH 用户管理工具
 ##############################################
 try:
@@ -90,7 +90,7 @@ class FreeSWITCH():
                 password = self.password1(8)
             else:
                 password = self.password(8)
-                
+
             vmpassword = self.password1(4)
 
         userfile = os.path.join(self.freeswitch, 'directory/default', f"{number}.xml")
