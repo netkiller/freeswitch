@@ -29,6 +29,7 @@ except ImportError as err:
 
 class FreeSWITCH():
     freeswitch = '/etc/freeswitch'
+    domain = 'sip.netkiller.cn'
 
     def __init__(self):
         self.basedir = os.path.dirname(os.path.abspath(__file__))
@@ -170,6 +171,7 @@ class FreeSWITCH():
             file.write(xmlString)
             message = f"Number: {number} Password: {password} Voicemail: {vmpassword}"
             self.logger.info(message)
+            print(f"Proxy: {domain}:5060")
             print(message)
 
     def directory(self):
