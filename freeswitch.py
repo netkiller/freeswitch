@@ -52,7 +52,8 @@ class FreeSWITCH():
                                  metavar="")
         self.parser.add_argument('-l', '--list', action="store_true", default=False, help='列出用户')
         self.parser.add_argument('-s', '--show', type=str, default=None, help='查看用户', metavar="1000")
-        self.parser.add_argument('--strength', action="store_true", default=False, help='密码强度（字母加数字）')
+        self.parser.add_argument('--simple', action="store_true", default=False, help='密码强度（8位数字）')
+        self.parser.add_argument('--strength', action="store_true", default=False, help='密码强度（16位字母加数字）')
         self.parser.add_argument('-e', '--export', type=str, default=None, help='导出联系人', metavar="contacts.csv")
         self.parser.add_argument('-d', '--debug', action="store_true", default=False, help='调试模式')
         self.parser.add_argument('-b', '--backup', action="store_true", default=False, help='备份 XML 配置文件')
@@ -84,9 +85,12 @@ class FreeSWITCH():
             vmpassword = self.args.passwd
         else:
             if self.args.strength:
-                password = self.password()
-            else:
+                password = self.password(16)
+            elif self.args.simple:
                 password = self.password1(8)
+            else:
+                password = self.password(8)
+                
             vmpassword = self.password1(4)
 
         userfile = os.path.join(self.freeswitch, 'directory/default', f"{number}.xml")
@@ -171,7 +175,7 @@ class FreeSWITCH():
             file.write(xmlString)
             message = f"Number: {number} Password: {password} Voicemail: {vmpassword}"
             self.logger.info(message)
-            print(f"Proxy: {domain}:5060")
+            print(f"Proxy: {self.domain}:5060")
             print(message)
 
     def directory(self):
