@@ -1,0 +1,19 @@
+[project]
+name = "sip"
+version = "0.0.1"
+authors = [
+  { name="Neo", email="netkiller@msn.com" },
+]
+description = "freeswitch user administrator"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://www.netkiller.cn"
+Issues = "https://github.com/netkiller/freeswitch/issues"
