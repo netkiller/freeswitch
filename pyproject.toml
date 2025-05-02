@@ -1,5 +1,5 @@
 [project]
-name = "sip"
+name = "freeswitch"
 version = "0.0.1"
 authors = [
   { name="Neo", email="netkiller@msn.com" },
@@ -17,3 +17,6 @@ license-files = ["LICEN[CS]E*"]
 [project.urls]
 Homepage = "https://www.netkiller.cn"
 Issues = "https://github.com/netkiller/freeswitch/issues"
+
+[project.scripts]
+sip = "freeswitch.sip:main"

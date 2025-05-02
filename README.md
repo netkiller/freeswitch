@@ -2,7 +2,7 @@
 
 ## 安装依赖
 
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install freeswitch -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ## 帮助信息
 
@@ -79,4 +79,35 @@ PS D:\GitHub\freeswitch> python.exe .\freeswitch.py -l
 
 ```shell
 PS D:\GitHub\freeswitch> python.exe .\freeswitch.py -r 1000
+```
+
+## 编译包
+
+```shell
+(.venv) neo@Neo-Mac-mini-M4 freeswitch % pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+(.venv) neo@Neo-Mac-mini-M4 freeswitch % python3 -m build 
+(.venv) neo@Neo-Mac-mini-M4 freeswitch % pip install dist/freeswitch-0.0.1-py3-none-any.whl --force-reinstall 
+
+(.venv) neo@Neo-Mac-mini-M4 freeswitch % sip 
+usage: sip [-h] [-a   ] [-p ] [-r 1000] [-c   ] [-l] [-s 1000] [--simple] [--strength] [-e contacts.csv] [-d] [-b]
+
+FreeSWITCH 用户管理工具
+
+options:
+  -h, --help            show this help message and exit
+  -a, --add             <number> <callsign> <callgroup> 添加用户
+  -p, --passwd          指定密码
+  -r, --remove 1000     删除用户
+  -c, --change          <number> <callsign> <callgroup> 修改用户
+  -l, --list            列出用户
+  -s, --show 1000       查看用户
+  --simple              密码强度（8位数字）
+  --strength            密码强度（16位字母加数字）
+  -e, --export contacts.csv
+                        导出联系人
+  -d, --debug           调试模式
+  -b, --backup          备份 XML 配置文件
+
+Author: netkiller - https://www.netkiller.cn/linux/voip/
+
 ```
