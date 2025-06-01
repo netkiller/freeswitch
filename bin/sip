@@ -43,12 +43,12 @@ class FreeSWITCH():
         self.parser = argparse.ArgumentParser(description='FreeSWITCH 用户管理工具',
                                               epilog='Author: netkiller - https://www.netkiller.cn/linux/voip/')
 
-        self.parser.add_argument('-a', '--add', nargs=3, default=None, help='<number> <callsign> <callgroup> 添加用户',
+        self.parser.add_argument('-a', '--add', nargs=3, default=None, help='<number> <callsign> 添加用户',
                                  metavar="")
         self.parser.add_argument('-p', '--passwd', type=str, default=None, help='指定密码', metavar="")
         self.parser.add_argument('-r', '--remove', type=str, default=None, help='删除用户', metavar="1000")
         self.parser.add_argument('-c', '--change', nargs=3, default=None,
-                                 help='<number> <callsign> <callgroup> 修改用户',
+                                 help='<number> <callsign> 修改用户',
                                  metavar="")
         self.parser.add_argument('-l', '--list', action="store_true", default=False, help='列出用户')
         self.parser.add_argument('-s', '--show', type=str, default=None, help='查看用户', metavar="1000")
