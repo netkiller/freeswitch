@@ -43,7 +43,7 @@ class FreeSWITCH():
         self.parser = argparse.ArgumentParser(description='FreeSWITCH 用户管理工具',
                                               epilog='Author: netkiller - https://www.netkiller.cn/linux/voip/')
 
-        self.parser.add_argument('-a', '--add', nargs=3, default=None, help='<number> <callsign> <callgroup> 添加用户',
+        self.parser.add_argument('-a', '--add', nargs=2, default=None, help='<number> <callsign> <callgroup> 添加用户',
                                  metavar="")
         self.parser.add_argument('-p', '--passwd', type=str, default=None, help='指定密码', metavar="")
         self.parser.add_argument('-r', '--remove', type=str, default=None, help='删除用户', metavar="1000")
@@ -85,11 +85,11 @@ class FreeSWITCH():
             vmpassword = self.args.passwd
         else:
             if self.args.strength:
-                password = self.password(16)
+                password = self.password1(16)
             elif self.args.simple:
                 password = self.password1(8)
             else:
-                password = self.password(8)
+                password = self.password()
 
             vmpassword = self.password1(4)
 
@@ -158,11 +158,11 @@ class FreeSWITCH():
         outbound_caller_id_number.setAttribute('value', '$${outbound_caller_id}')
         variables.appendChild(outbound_caller_id_number)
 
-        if len(args) == 3:
-            callgroup = doc.createElement('variable')
-            callgroup.setAttribute('name', 'callgroup')
-            callgroup.setAttribute('value', args[2])
-            variables.appendChild(callgroup)
+        # if len(args) == 3:
+        callgroup = doc.createElement('variable')
+        callgroup.setAttribute('name', 'callgroup')
+        callgroup.setAttribute('value', callsign.lower())
+        variables.appendChild(callgroup)
 
         xmlString = doc.childNodes[0].toprettyxml()
         if self.args.debug:
@@ -270,7 +270,7 @@ class FreeSWITCH():
     def main(self):
 
         # print(self.args)
-        if self.args.add and len(self.args.add) >= 2:
+        if self.args.add and len(self.args.add) >= 1:
             self.add(self.args.add)
         elif self.args.list:
             self.list()
